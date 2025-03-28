@@ -1,0 +1,26 @@
+pipeline{
+    agent any{}
+    tools{
+        maven 'maven'
+    }
+    stages{
+        stage('Build'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+        stage('test'){
+            steps{
+                sh 'mvn test'
+            }
+        }
+        stage('Run JAR'){
+            steps{
+                script{
+                    def output=sh(script: 'java -jar target/jenkins-test-1.0-SNAPSHOT.jar', returnStdout: true).trim();
+                    echo "Output from JAR: ${output}"
+                }
+            }
+        }
+    }
+}
